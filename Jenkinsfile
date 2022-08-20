@@ -1,9 +1,16 @@
-pipeline {
-   agent any
-   tools {nodejs "node"}
+#!/usr/bin/env groovy
 
-   stages {
-      stage('setup') {
+pipeline {
+
+    agent {
+        docker {
+            image 'node'
+            args '-u root'
+        }
+    }
+
+    stages {
+        stage('Build') {
          steps {
             browserstack(credentialsId: '0cfd25c7-093e-4833-85fb-a6fb7f4b671f') {
                // some example test commands ...
@@ -13,6 +20,12 @@ pipeline {
              // Enable reporting in Jenkins
              browserStackReportPublisher 'automate'
          }
-      }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                sh 'npm test'
+            }          
+        }
     }
-  }
+}
