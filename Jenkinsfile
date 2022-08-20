@@ -22,13 +22,10 @@ pipeline {
         }
         stage('Test') {
             steps {
-               browserstack(credentialsId: '0cfd25c7-093e-4833-85fb-a6fb7f4b671f') {
                 echo 'Testing...'
                 sh 'npm test'
                 sh 'browserstack-cypress run'
-            }
-             // Enable reporting in Jenkins
-             browserStackReportPublisher 'automate'                      
+            }          
         }
     }
 }
